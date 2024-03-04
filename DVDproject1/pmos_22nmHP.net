@@ -1,0 +1,31 @@
+.include 22nm_HP.pm
+.options GMIN=1e-020 ABSTOL=1e-18
+.temp 25
+
+.param Lmin=22n
+.param Wmin=22n
+.param Ldiff=44n
+
+M1 drain gate source body pmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+Vd 	drain	0		0
+Vg 	gate	0		0
+Vs 	source	0		0
+Vb 	body	0		0
+
+
+
+.control
+echo "Temp M1[W] V(gate) I(Vd) I(Vg) I(Vs) I(Vb)" > pmos_simulation_results.txt
+let i=22
+while i <= 176
+
+    alter @M1[W] = i*1n
+    dc Vg 0 0.8 0.1
+    print @M1[W] V(gate) I(Vd) I(Vg) I(Vs) I(Vb)  
+    echo "25" "$&i" "$&V(gate)" "$&I(Vd)" "$&I(Vg)" "$&I(Vs)" "$&I(Vb)" >> pmos_simulation_results.txt
+    let i = i+22
+    
+end
+
+.endc
+.end
