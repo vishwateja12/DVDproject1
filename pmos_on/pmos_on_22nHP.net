@@ -15,7 +15,7 @@ Vdd alim	  0
 
 
 .control
-echo "Temp M1[W] V-sweep V(drain) V(gate) V(source) V(body)  I(Vd) I(Vg) I(Vs) I(Vb)" > W6pmos_ON_simulation_results.txt
+echo "" > W6pmos_ON_simulation_results.txt
 let voltage=0
 let Vddbasic=0.8
 while voltage le Vddbasic
