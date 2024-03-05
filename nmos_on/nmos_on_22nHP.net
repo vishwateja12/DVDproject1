@@ -1,5 +1,5 @@
 .include 22nm_HP.pm
-.options GMIN=1e-020 ABSTOL=1e-18
+.option GMIN=1e-020 ABSTOL=1e-18 temp=25
 
 .param Lmin=22n
 .param Wmin=176n
