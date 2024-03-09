@@ -1,7 +1,7 @@
 import pandas as pd
 from tabulate import tabulate
 
-file_name = 'W6nmos_ON_simulation_results.txt'
+file_name = 'W1nmos_ON_simulation_results.txt'
 
 with open(file_name, 'r') as file:
     # Read data line by line and split each line
@@ -12,6 +12,6 @@ headers = ["Temp", "M1[W]", "V-sweep", "V(D1)", "V(S1)", "V(G1)", "V(G2)","V(S2)
 table = tabulate(data,headers, tablefmt="fancy_grid")
 print(table)
 
-output_file = 'W6_on.txt'
+output_file = 'W1_on.txt'
 with open(output_file, 'w') as output:
     print(table, file=output)
