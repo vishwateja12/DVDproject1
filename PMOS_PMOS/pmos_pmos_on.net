@@ -2,33 +2,41 @@
 .option GMIN=1e-020 ABSTOL=1e-18 temp=25
 
 .param Lmin=22n
-.param Wmin=176n
+.param Wmin=22n
 .param Ldiff=44n
 
 M1 D1 G1 S1 B1 pmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
 M2 D2 G2 D1 B2 pmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
 
 Vd 	D2	  0     0.8
-Vg1 	G1	  alim	0
-Vg2 	G2	  alim	0
+Vg1 	G1	  alim1	0
+Vg2 	G2	  alim2	0
 Vs 	S1	0		  0.8
 Vb1 	B1	  S1		  0
 Vb2 	B2	  D1		  0
 
-Vdd alim	  0
+Vdd1 alim1	  0   0
+Vdd2 alim2	  0   0
 
 
 .control
-echo "" > W6pmos_ON_simulation_results.txt
-let voltage=0
+echo "" > W1pmos_ON_simulation_results.txt
+let voltage1=0
+let voltage2=0
 let Vddbasic=0.8
-while voltage le Vddbasic
-  let voltage = voltage + 0.05
-  alter Vdd = voltage
-  dc TEMP 25 50 60
-  print @M1[W] abs(V(alim)) V(D2) V(S1) V(G1) V(G2) V(D2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
-  let i = @M1[W]
-  echo "25" "$&i" "$&voltage" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(G2)" "$&V(D2)" "$&V(B1)" "$&V(B2)" "$&I(Vd)" "$&I(Vg1)" "$&I(Vg2)" "$&I(Vs)" "$&I(Vb1)" "$&I(Vb2)" >> W6pmos_ON_simulation_results.txt
+while voltage1 le Vddbasic
+  let voltage1 = voltage1 + 0.05
+    while voltage2 le vddbasic
+        let voltage2 = voltage2 + 0.05
+        alter Vdd1 = voltage1
+        alter vdd2 = voltage2
+        dc TEMP 25 50 60
+        print @M1[W] abs(V(alim1)) abs(V(alim2)) V(D2) V(S1) V(G1) V(G2) V(D2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
+        let i = @M1[W]
+        echo "25" "$&i" "$&voltage1" "$&voltage2" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(G2)" "$&V(D2)" "$&V(B1)" "$&V(B2)" "$&I(Vd)" "$&I(Vg1)" "$&I(Vg2)" "$&I(Vs)" "$&I(Vb1)" "$&I(Vb2)" >> W1pmos_ON_simulation_results.txt
+    end
+  let voltage2  = 0
+end
 end
 .endc
 .end
