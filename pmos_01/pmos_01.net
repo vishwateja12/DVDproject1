@@ -1,0 +1,33 @@
+.include 22nm_HP.pm
+.options GMIN=1e-020 ABSTOL=1e-18
+
+.param Lmin=22n
+.param Wmin=176n
+.param Ldiff=44n
+
+M1 D1 G1 S1 B1 pmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+M2 D2 G2 D1 B2 pmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+Vd 	D2	  0    0
+Vg1 	G1	  0.8	0
+Vg2 	G2	  0	0
+Vs 	S1	0.8		  0
+Vb1 	B1	  S1		  0
+Vb2 	B2	  D1		  0
+
+
+.control
+echo "" > pmos_00.txt
+let Wbasic=154n
+foreach W1 22n 44n 66n 88n 132n 176n 
+  foreach W2 in 22n 44n 66n 88n 132n 176n
+    alter @M1[W]=$W1
+    alter @M2[W]=$W2
+    dc TEMP 25 50 60
+    let i1 = @M1[W]
+    let i2 = @M2[W]
+    print @M1[W] @M2[W] V(D1) V(S1) V(G1) V(G2) V(D1) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
+    echo "25" "$&i1" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(B1)" "$&i2" "$&V(D2)" "$&V(D1)" "$&V(G2)" "$&V(B2)" >> pmos_00.txt
+  end
+end
+.endc
+.end
