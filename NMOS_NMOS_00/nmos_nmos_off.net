@@ -1,0 +1,34 @@
+.include 22nm_HP.pm
+.option GMIN=1e-020 ABSTOL=1e-18 temp=25
+
+.param Lmin=22n
+.param Wmin=176n
+.param Ldiff=44n
+
+M1 D1 G1 S1 B1 nmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+M2 S1 G2 S2 B2 nmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+
+Vd  D1	  alim     0
+Vg1 G1	  0	    0
+Vg2 G2	  0	    0
+Vs 	S2	  0		0
+Vb1 B1	  0		0
+Vb2 B2	  0		0
+
+Vdd alim  0	  0
+
+
+.control
+echo "" > W6nmos_off_simulation_results.txt
+let voltage=0
+let Vddbasic=0.8
+while voltage le Vddbasic
+  let voltage = voltage + 0.05
+  alter Vdd = voltage
+  dc TEMP 25 50 60
+  print @M1[W] abs(V(alim)) V(D1) V(S1) V(G1) V(G2) V(S2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
+  let i = @M1[W]
+  echo "25" "$&i" "$&voltage" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(G2)" "$&V(S2)" "$&V(B1)" "$&V(B2)" "$&I(Vd)" "$&I(Vg1)" "$&I(Vg2)" "$&I(Vs)" "$&I(Vb1)" "$&I(Vb2)" >> W6nmos_off_simulation_results.txt
+end
+.endc
+.end
