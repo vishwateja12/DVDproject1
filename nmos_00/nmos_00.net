@@ -17,11 +17,24 @@ Vb2 	B2	  S2		  0
 
 .control
 echo "" > nmos_00.txt
-dc TEMP 25 50 60
-let i1 = @M1[W]
-let i2 = @M2[W]
-print @M1[W] @M2[W] V(D1) V(S1) V(G1) V(G2) V(S2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
-echo "25" "$&i1" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(B1)" "$&i2" "$&V(S1)" "$&V(S2)" "$&V(G2)" "$&V(B2)" >> nmos_00.txt
+foreach Win 22n 44n 66n 88n 132n 176n
+    alter M1 W {$Win}
+	alter M1 AS {$Win* L} 
+	alter M1 AD {$Win* L}
+	alter M1 PS {2*($Win + L)}
+	alter M1 PD {2*($Win + L)}
 
+	alter M2 W {$Win} 
+	alter M2 AS {$Win* L} 
+	alter M2 AD {$Win* L}
+	alter M2 PS {2*($Win + L)}
+	alter M2 PD {2*($Win + L)}
+
+    dc TEMP 25 50 60
+    let i1 = @M1[W]
+    let i2 = @M2[W]
+    print @M1[W] @M2[W] V(D1) V(S1) V(G1) V(G2) V(S2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
+    echo "25" "$&i1" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(B1)" "$&i2" "$&V(S1)" "$&V(S2)" "$&V(G2)" "$&V(B2)" >> nmos_00.txt
+end
 .endc
 .end
