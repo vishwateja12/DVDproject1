@@ -5,7 +5,7 @@
 ## Temp │   M1[W] │   V-sweep │   V(drain) │   V(source) │   V(gate) │   V(body) │        I(Vd) │       I(Vg) │       I(Vs) │       I(Vb) │
 
 temp = 0
-width = 1
+wmin = 1
 Valim = 2
 Vd = 3
 Vs = 4
@@ -45,7 +45,7 @@ def ISubN(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -72,7 +72,7 @@ def ISubP(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1# because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -99,7 +99,7 @@ def IgateN_off(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -126,7 +126,7 @@ def IgateN_on(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -154,7 +154,7 @@ def IgateP_off(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -181,7 +181,7 @@ def IgateP_on(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -208,7 +208,7 @@ def IbodyN_off(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -235,7 +235,7 @@ def IbodyN_on(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -263,7 +263,7 @@ def IbodyP_off(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -290,7 +290,7 @@ def IbodyP_on(voltage,width):
     v_round = round(voltage,2)
     v_round = abs(v_round)
 
-    row = (v_round/0.01) -1 # because it takes to the corresponding row in 2-d vector based on the voltage
+    row = (v_round/0.01)-1 # because it takes to the corresponding row in 2-d vector based on the voltage
     row = int(round(row))
 
     val = 0
@@ -356,6 +356,36 @@ vn01 = [2.07744E-05,2.19535E-05,2.33051E-05,2.39811E-05,2.46572E-05,2.49954E-05]
 vn10 = [0.666334,0.666317,0.666318,0.666319,0.666319,0.66632]
 vn11 = [2.86192E-08,3.91613E-08,4.15407E-08,4.27302E-08,4.39197E-08,4.45144E-08]
 
+def nstack(A0,A1,width,vdd):
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
+    if((A0==0) and (A1==0)):
+         leakage_sub = abs(ISubN(vn00[5],width))
+         leakage_body = 2*(abs(IbodyN_off(vn00[5],width))+abs(IbodyN_off(vdd,width)) )
+         leakage_gate = 2*(abs(IgateN_off(vn00[5],width))+abs(IgateN_off(vdd,width)) )
+    elif((A0==0) and (A1==1)):
+         leakage =0
+    elif((A0==1) and (A1==0)):
+         leakage =0
+    else:
+         leakage =0
+
+    return leakage_sub,leakage_body,leakage_gate
+
+def pstack(A0,A1,width,vdd):
+    leakage =0
+    if((A0==0) and (A1==0)):
+         leakage = 0
+    elif((A0==0) and (A1==1)):
+         leakage =0
+    elif((A0==1) and (A1==0)):
+         leakage =0
+    else:
+         leakage =0
+
+    return leakage
+
 def AND(A0,A1,width,vdd):
     leakage =0
     if((A0==0) and (A1==0)):
@@ -368,3 +398,51 @@ def AND(A0,A1,width,vdd):
          leakage =0
 
     return leakage
+
+def OR(A0,A1,width,vdd):
+    leakage =0
+    if((A0==0) and (A1==0)):
+         leakage = 0
+    elif((A0==0) and (A1==1)):
+         leakage =0
+    elif((A0==1) and (A1==0)):
+         leakage =0
+    else:
+         leakage =0
+
+    return leakage
+
+def NOR(A0,A1,width,vdd):
+    leakage =0
+    if((A0==0) and (A1==0)):
+         leakage = 0
+    elif((A0==0) and (A1==1)):
+         leakage =0
+    elif((A0==1) and (A1==0)):
+         leakage =0
+    else:
+         leakage =0
+
+    return leakage
+
+def NOT(A0,width,vdd):
+    leakage =0
+    if (A0==0):
+         leakage = 0
+    elif (A0==1):
+         leakage =0
+
+    return leakage
+
+leakage_sub,leakage_body,leakage_gate = nstack(0,0,8,0.8,)
+print(leakage_sub)
+print(leakage_body)
+print(leakage_gate)
+
+
+leakage_sub = abs(ISubN(vn00[5],8))
+leakage_body = 2*(abs(IbodyN_off(vn00[5],8))+abs(IbodyN_off(0.8,8)) )
+leakage_gate = 2*(abs(IgateN_off(vn00[5],8))+abs(IgateN_off(0.8,8)) )
+
+
+
