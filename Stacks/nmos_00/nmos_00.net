@@ -33,7 +33,10 @@ foreach Win 22n 44n 66n 88n 132n 176n
     dc TEMP 25 50 60
     let i1 = @M1[W]
     let i2 = @M2[W]
-    print @M1[W] @M2[W] V(D1) V(S1) V(G1) V(G2) V(S2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2)
+	let leakage_body = abs(I(vb1))+abs(I(vb2))
+	let leakage_gate = abs(I(vg1))+abs(I(vg2))
+	let leakage_sub = abs(I(vs))
+    print @M1[W] @M2[W] V(D1) V(S1) V(G1) V(G2) V(S2) V(B1) V(B2) I(Vd) I(Vg1) I(Vg2) I(Vs) I(Vb1) I(Vb2) leakage_body leakage_gate leakage_sub
     echo "25" "$&i1" "$&V(D1)" "$&V(S1)" "$&V(G1)" "$&V(B1)" "$&i2" "$&V(S1)" "$&V(S2)" "$&V(G2)" "$&V(B2)" >> nmos_00.txt
 end
 .endc
