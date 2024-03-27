@@ -447,51 +447,51 @@ def AND(A0,A1,width,vdd):
 
     return leakage_sub,leakage_body,leakage_gate
 
-# def OR(A0,A1,width,vdd):
-#     leakage_sub =0
-#     leakage_body = 0
-#     leakage_gate = 0
-#     if((A0==0) and (A1==0)):
-#          leakage_sub = abs(ISubN(vn00[wToi(width)],width)) + abs(ISubP(vdd,width))  
-#          leakage_body = 2*(abs(IbodyN_off(vn00[wToi(width)],width))+abs(IbodyN_off(vdd,width)) ) + 2*abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + abs(IbodyP_off(vdd,width))
-#          leakage_gate = 2*(abs(IgateN_off(vn00[wToi(width)],width))+abs(IgateN_off(vdd,width)) ) + 2*abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + abs(IgateP_off(vdd,width))
-#     elif((A0==0) and (A1==1)):
-#          leakage_sub = abs(ISubN(vdd,width)) + abs(ISubP(vdd,width)) 
-#          leakage_body = abs(IbodyN_off(vdd,width))+abs(IbodyN_on(vdd,width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
-#          leakage_gate = abs(IgateN_off(vdd,width))+abs(IgateN_on(vdd,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
-#     elif((A0==1) and (A1==0)):
-#          leakage_sub =abs(ISubN(vn10[wToi(width)],width))+abs(ISubP(vdd,width)) 
-#          leakage_body = abs(IbodyN_off(vn10[wToi(width)],width))+abs(IbodyN_on(vdd-vn10[wToi(width)],width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
-#          leakage_gate = abs(IgateN_off(vn10[wToi(width)],width))+abs(IgateN_on(0.01,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
-#     else:
-#          leakage_sub =2*abs(ISubP(vdd,width))+abs(ISubN(vdd,width))
-#          leakage_body = 2*abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))+abs(IbodyP_on(0.01,width))+abs(IbodyN_off(vdd,width))
-#          leakage_gate = 2*abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))+abs(IgateP_on(0.01,width))+abs(IgateN_off(vdd,width))
+def OR(A0,A1,width,vdd):
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
+    if((A0==0) and (A1==0)):
+         leakage_sub =2*abs(ISubP(vdd,width))+abs(ISubN(vdd,width))
+         leakage_body = 2*abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))+abs(IbodyP_on(0.01,width))+abs(IbodyN_off(vdd,width))
+         leakage_gate = 2*abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))+abs(IgateP_on(0.01,width))+abs(IgateN_off(vdd,width))
+    elif((A0==0) and (A1==1)):
+         leakage_sub =abs(ISubP(vp01[wToi(width)],width))+abs(ISubN(vdd,width)) 
+         leakage_body = abs(IbodyP_off(vp01[wToi(width)],width))+abs(IbodyP_on(vdd-vp10[wToi(width)],width))+abs(IbodyN_on(0.01,width))+ abs(IbodyP_on(vdd,width)) + 2*abs(IbodyN_off(vdd,width))
+         leakage_gate = abs(IgateP_off(vp01[wToi(width)],width))+abs(IgateP_on(0.01,width))+abs(IgateN_on(0.01,width))+ abs(IgateP_on(vdd,width)) + 2*abs(IgateN_off(vdd,width))
+    elif((A0==1) and (A1==0)):
+         leakage_sub = abs(ISubP(vdd,width)) + abs(ISubN(vdd,width)) 
+         leakage_body = abs(IbodyP_off(vdd,width))+abs(IbodyP_on(vdd,width))+abs(IbodyN_on(0.01,width))+ abs(IbodyP_on(vdd,width)) + 2*abs(IbodyN_off(vdd,width))
+         leakage_gate = abs(IgateP_off(vdd,width))+abs(IgateP_on(vdd,width))+abs(IgateN_on(0.01,width))+ abs(IgateP_on(vdd,width)) + 2*abs(IgateN_off(vdd,width))
+    else:
+         leakage_sub = abs(ISubP(vp11[wToi(width)],width)) + abs(ISubN(vdd,width))  
+         leakage_body = 2*(abs(IbodyP_off(vp11[wToi(width)],width))+abs(IbodyP_off(vdd,width)) ) + 2*abs(IbodyN_on(0.01,width))+ abs(IbodyP_on(vdd,width)) + abs(IbodyN_off(vdd,width))
+         leakage_gate = 2*(abs(IgateP_off(vp11[wToi(width)],width))+abs(IgateP_off(vdd,width)) ) + 2*abs(IgateN_on(0.01,width))+ abs(IgateP_on(vdd,width)) + abs(IgateN_off(vdd,width))
+    return leakage_sub,leakage_body,leakage_gate
 
-#     return leakage_sub,leakage_body,leakage_gate
+def NOR(A0,A1,width,vdd):
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
+    if((A0==0) and (A1==0)):
+         leakage_sub =2*abs(ISubN(vdd,width))
+         leakage_body = 2*abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
+         leakage_gate = 2*abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
+    elif((A0==0) and (A1==1)):
+         leakage_sub =abs(ISubP(vp01[wToi(width)],width)) 
+         leakage_body = abs(IbodyP_off(vp01[wToi(width)],width))+abs(IbodyP_on(vdd-vp10[wToi(width)],width))+abs(IbodyN_on(0.01,width))+abs(IbodyN_off(vdd,width))
+         leakage_gate = abs(IgateP_off(vp01[wToi(width)],width))+abs(IgateP_on(0.01,width))+abs(IgateN_on(0.01,width))+abs(IgateN_off(vdd,width))
+    elif((A0==1) and (A1==0)):
+         leakage_sub = abs(ISubP(vdd,width))
+         leakage_body = abs(IbodyP_off(vdd,width))+abs(IbodyP_on(vdd,width))+abs(IbodyN_on(0.01,width))+ abs(IbodyN_off(vdd,width))
+         leakage_gate = abs(IgateP_off(vdd,width))+abs(IgateP_on(vdd,width))+abs(IgateN_on(0.01,width))+ abs(IgateN_off(vdd,width))
+    else:
+         leakage_sub = abs(ISubP(vp11[wToi(width)],width))   
+         leakage_body = 2*(abs(IbodyP_off(vp11[wToi(width)],width)) ) + 2*abs(IbodyN_on(0.01,width))
+         leakage_gate = 2*(abs(IgateP_off(vp11[wToi(width)],width)) ) + 2*abs(IgateN_on(0.01,width))
+    return leakage_sub,leakage_body,leakage_gate
+    
 
-# def NOR(A0,A1,width,vdd):
-#     leakage_sub =0
-#     leakage_body = 0
-#     leakage_gate = 0
-#     if((A0==0) and (A1==0)):
-#          leakage_sub = abs(ISubN(vn00[wToi(width)],width)) + abs(ISubP(vdd,width))  
-#          leakage_body = 2*(abs(IbodyN_off(vn00[wToi(width)],width))+abs(IbodyN_off(vdd,width)) ) + 2*abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + abs(IbodyP_off(vdd,width))
-#          leakage_gate = 2*(abs(IgateN_off(vn00[wToi(width)],width))+abs(IgateN_off(vdd,width)) ) + 2*abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + abs(IgateP_off(vdd,width))
-#     elif((A0==0) and (A1==1)):
-#          leakage_sub = abs(ISubN(vdd,width)) + abs(ISubP(vdd,width)) 
-#          leakage_body = abs(IbodyN_off(vdd,width))+abs(IbodyN_on(vdd,width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
-#          leakage_gate = abs(IgateN_off(vdd,width))+abs(IgateN_on(vdd,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
-#     elif((A0==1) and (A1==0)):
-#          leakage_sub =abs(ISubN(vn10[wToi(width)],width))+abs(ISubP(vdd,width)) 
-#          leakage_body = abs(IbodyN_off(vn10[wToi(width)],width))+abs(IbodyN_on(vdd-vn10[wToi(width)],width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
-#          leakage_gate = abs(IgateN_off(vn10[wToi(width)],width))+abs(IgateN_on(0.01,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
-#     else:
-#          leakage_sub =2*abs(ISubP(vdd,width))+abs(ISubN(vdd,width))
-#          leakage_body = 2*abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))+abs(IbodyP_on(0.01,width))+abs(IbodyN_off(vdd,width))
-#          leakage_gate = 2*abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))+abs(IgateP_on(0.01,width))+abs(IgateN_off(vdd,width))
-
-#     return leakage_sub,leakage_body,leakage_gate
 def NOT(A0,width,vdd):
     leakage_sub =0
     leakage_body = 0
