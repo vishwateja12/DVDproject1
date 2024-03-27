@@ -1,0 +1,33 @@
+.include 22nm_HP.pm
+.options GMIN=1e-020 ABSTOL=1e-18
+
+.param Lmin=22n
+.param Wmin=22n
+.param Ldiff=44n
+
+Mp1 Dp1 G0 Sp1 Bp1 pmos W={8*Wmin} L={Lmin} AS={8*Wmin*Ldiff} AD={8*Wmin*Ldiff} PS={2*(Ldiff+8*Wmin)} PD={2*(Ldiff+8*Wmin)}
+Mp2 out G1 Dp1 Bp2 pmos W={8*Wmin} L={Lmin} AS={8*Wmin*Ldiff} AD={8*Wmin*Ldiff} PS={2*(Ldiff+8*Wmin)} PD={2*(Ldiff+8*Wmin)}
+
+Mn1 out G0 Sn1 Bn1  nmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+Mn2 out G1 Sn1 Bn2  nmos W={Wmin} L={Lmin} AS={Wmin*Ldiff} AD={Wmin*Ldiff} PS={2*(Ldiff+Wmin)} PD={2*(Ldiff+Wmin)}
+
+
+vdd Sp1 0 0.8
+vss Sn1  0 0
+vg1 G0  0 0.8
+vg2 G1  0 0.8
+vbp1 Bp1 Sp1 0
+vbp2 Bp2 Dp1 0
+vbn1 Bn1 Sn1 0
+vbn2 Bn2 Sn1 0
+
+.control
+echo "" > and_00.txt
+dc TEMP 25 50 60
+let leakage_gate = (abs(I(vg1))+abs(I(vg2)))
+let leakage_body = (abs(I(vbn1))+abs(I(vbn2))+abs(I(vbp1))+abs(I(vbp2)))
+let leakage_sub = abs(I(vss))
+print  V(G0) V(G1) V(Sp1) V(out) V(Sn1) V(Sn1) I(vdd) I(vss) I(vg1) I(vg2) I(vbp1) I(vbp2) I(vbn1) I(vbn2) leakage_body leakage_gate leakage_sub
+echo "25" "$&I(vdd)" "$&I(vss)" "$&I(vg1)" "$&I(vg2)" "$&I(vbp1)" "$&I(vbp2)" "$&I(vbn1)" "$&I(vbn2)"  >> and_00.txt
+.endc
+.end
