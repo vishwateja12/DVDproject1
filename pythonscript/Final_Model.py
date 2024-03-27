@@ -16,6 +16,22 @@ Ig = 8
 Is = 9
 Ib = 10
 
+def wToi(w):
+    
+    if(w==1):
+        i=0
+    elif(w==2):
+        i=1
+    elif(w==3):
+        i=2
+    elif(w==4):
+        i=3
+    elif(w==6):
+        i=4
+    elif(w==8):
+        i=5
+    return i
+
 # this function is to extract the data from text file and convert into 2-d vector
 def readFromText(path):
     
@@ -356,48 +372,80 @@ vn01 = [2.07744E-05,2.19535E-05,2.33051E-05,2.39811E-05,2.46572E-05,2.49954E-05]
 vn10 = [0.666334,0.666317,0.666318,0.666319,0.666319,0.66632]
 vn11 = [2.86192E-08,3.91613E-08,4.15407E-08,4.27302E-08,4.39197E-08,4.45144E-08]
 
+vp00 = [0.8,0.8,0.8,0.8,0.8,0.8]
+vp01 = [0.799951,0.79995,0.799947,0.799946,0.799945,0.799944]
+vp10 = [0.146732,0.146738,0.146745,0.146748,0.146751,0.146753]
+vp11 = [0.653596,0.65359,0.653583,0.65358,0.653577,0.653576]
+
+
 def nstack(A0,A1,width,vdd):
     leakage_sub =0
     leakage_body = 0
     leakage_gate = 0
     if((A0==0) and (A1==0)):
-         leakage_sub = abs(ISubN(vn00[5],width))
-         leakage_body = 2*(abs(IbodyN_off(vn00[5],width))+abs(IbodyN_off(vdd,width)) )
-         leakage_gate = 2*(abs(IgateN_off(vn00[5],width))+abs(IgateN_off(vdd,width)) )
+         leakage_sub = abs(ISubN(vn00[wToi(width)],width))
+         leakage_body = 2*(abs(IbodyN_off(vn00[wToi(width)],width))+abs(IbodyN_off(vdd,width)) )
+         leakage_gate = 2*(abs(IgateN_off(vn00[wToi(width)],width))+abs(IgateN_off(vdd,width)) )
     elif((A0==0) and (A1==1)):
-         leakage =0
+         leakage_sub = abs(ISubN(vdd,width))
+         leakage_body = abs(IbodyN_off(vdd,width))+abs(IbodyN_on(vdd,width))
+         leakage_gate = abs(IgateN_off(vdd,width))+abs(IgateN_on(vdd,width))
     elif((A0==1) and (A1==0)):
-         leakage =0
+         leakage_sub =abs(ISubN(vn10[wToi(width)],width))
+         leakage_body = abs(IbodyN_off(vn10[wToi(width)],width))+abs(IbodyN_on(vdd-vn10[wToi(width)],width))
+         leakage_gate = abs(IgateN_off(vn10[wToi(width)],width))+abs(IgateN_on(0.01,width))
     else:
-         leakage =0
+         leakage_sub =0
+         leakage_body = 2*abs(IbodyN_on(vdd,width))
+         leakage_gate = 2*abs(IgateN_on(vdd,width))
 
     return leakage_sub,leakage_body,leakage_gate
 
 def pstack(A0,A1,width,vdd):
-    leakage =0
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
     if((A0==0) and (A1==0)):
-         leakage = 0
+         leakage_sub =0
+         leakage_body = 2*abs(IbodyP_on(vdd,width))
+         leakage_gate = 2*abs(IgateP_on(vdd,width))
     elif((A0==0) and (A1==1)):
-         leakage =0
+         leakage_sub =abs(ISubP(0.01,width))
+         leakage_body = 2*abs(ISubP(0.79,width))+abs(IbodyP_on(vdd-vp01[wToi(width)],width))
+         leakage_gate = abs(IgateP_off(vp01[wToi(width)],width))+abs(IgateP_on(0.01,width))
     elif((A0==1) and (A1==0)):
-         leakage =0
+         leakage_sub = abs(ISubP(vp10[wToi(width)],width))
+         leakage_body = abs(IbodyP_off(vp10[wToi(width)],width))+abs(IbodyP_on(vdd-vp10[wToi(width)],width))
+         leakage_gate = abs(IgateP_off(vp10[wToi(width)],width))+abs(IgateP_on(vdd-vp10[wToi(width)],width))
     else:
-         leakage =0
+         leakage_sub = abs(ISubP(vp11[wToi(width)],width))
+         leakage_body = 2*(abs(IbodyP_off(vp11[wToi(width)],width))+abs(IbodyP_off(vdd,width)) )
+         leakage_gate = 2*(abs(IgateP_off(vp11[wToi(width)],width))+abs(IgateP_off(vdd,width)) )
 
-    return leakage
+    return leakage_sub,leakage_body,leakage_gate
 
 def AND(A0,A1,width,vdd):
-    leakage =0
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
     if((A0==0) and (A1==0)):
-         leakage = 0
+         leakage_sub = abs(ISubN(vn00[wToi(width)],width)) + abs(ISubP(vdd,width))  
+         leakage_body = 2*(abs(IbodyN_off(vn00[wToi(width)],width))+abs(IbodyN_off(vdd,width)) ) + 2*abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + abs(IbodyP_off(vdd,width))
+         leakage_gate = 2*(abs(IgateN_off(vn00[wToi(width)],width))+abs(IgateN_off(vdd,width)) ) + 2*abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + abs(IgateP_off(vdd,width))
     elif((A0==0) and (A1==1)):
-         leakage =0
+         leakage_sub = abs(ISubN(vdd,width)) + abs(ISubP(vdd,width)) 
+         leakage_body = abs(IbodyN_off(vdd,width))+abs(IbodyN_on(vdd,width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
+         leakage_gate = abs(IgateN_off(vdd,width))+abs(IgateN_on(vdd,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
     elif((A0==1) and (A1==0)):
-         leakage =0
+         leakage_sub =abs(ISubN(vn10[wToi(width)],width))+abs(ISubP(vdd,width)) 
+         leakage_body = abs(IbodyN_off(vn10[wToi(width)],width))+abs(IbodyN_on(vdd-vn10[wToi(width)],width))+abs(IbodyP_on(0.01,width))+ abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))
+         leakage_gate = abs(IgateN_off(vn10[wToi(width)],width))+abs(IgateN_on(0.01,width))+abs(IgateP_on(0.01,width))+ abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))
     else:
-         leakage =0
+         leakage_sub =2*abs(ISubP(vdd,width))+abs(ISubN(vdd,width))
+         leakage_body = 2*abs(IbodyN_on(vdd,width)) + 2*abs(IbodyP_off(vdd,width))+abs(IbodyP_on(0.01,width))+abs(IbodyN_off(vdd,width))
+         leakage_gate = 2*abs(IgateN_on(vdd,width)) + 2*abs(IgateP_off(vdd,width))+abs(IgateP_on(0.01,width))+abs(IgateN_off(vdd,width))
 
-    return leakage
+    return leakage_sub,leakage_body,leakage_gate
 
 def OR(A0,A1,width,vdd):
     leakage =0
@@ -426,15 +474,21 @@ def NOR(A0,A1,width,vdd):
     return leakage
 
 def NOT(A0,width,vdd):
-    leakage =0
+    leakage_sub =0
+    leakage_body = 0
+    leakage_gate = 0
     if (A0==0):
-         leakage = 0
+         leakage_sub = abs(ISubN(vdd,width))
+         leakage_body = abs(IbodyN_off(vdd,width))+abs(IbodyP_on(0.01,width))
+         leakage_gate = abs(IgateN_off(vdd,width))+abs(IgateP_on(0.01,width))
     elif (A0==1):
-         leakage =0
+         leakage_sub = abs(ISubP(vdd,width))
+         leakage_body = abs(IbodyN_on(0.01,width))+abs(IbodyP_off(vdd,width))
+         leakage_gate = abs(IgateP_off(vdd,width))+abs(IgateN_on(0.01,width))
 
-    return leakage
+    return leakage_sub,leakage_body,leakage_gate
 
-leakage_sub,leakage_body,leakage_gate = nstack(0,0,8,0.8,)
+leakage_sub,leakage_body,leakage_gate = NOT(0,8,0.8)
 print(leakage_sub)
 print(leakage_body)
 print(leakage_gate)
