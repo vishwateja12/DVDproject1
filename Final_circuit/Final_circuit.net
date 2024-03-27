@@ -84,15 +84,15 @@ XOR8 P0 P1 w23 vddrail gndrail OR
 XOR9 P2 P3 w24 vddrail gndrail OR
 XOR10 w23 w24 P vddrail gndrail OR
 
-VP0 P0 0 0.8
+VP0 P0 0 0
 VP1 P1 0 0
 VP2 P2 0 0
 VP3 P3 0 0
 
-VG0 G0 0 0.8
-VG1 G1 0 0.8
-VG2 G2 0 0.8
-VG3 G3 0 0.8
+VG0 G0 0 0
+VG1 G1 0 0
+VG2 G2 0 0
+VG3 G3 0 0
 
 VCn Cn 0 0
 
@@ -104,6 +104,9 @@ Vgnd gndrail 0 0
 
 .control
 op
-print V(G0) V(G1) V(G2) V(G3) V(P0) V(P1) V(P2) V(P3) V(P) V(G) V(cnz) V(cny) V(cnx)
+let leakage_sub = abs(I(Vgnd))
+let leakage_gate = (abs(I(VP0))+abs(I(VP1))+abs(I(VP2))+abs(I(VP3))+abs(I(VG0))+abs(I(VG1))+abs(I(VG2))+abs(I(VG3))+abs(I(VCn)))
+let leakage = leakage_gate + leakage_sub
+print leakage  V(G0) V(G1) V(G2) V(G3) V(P0) V(P1) V(P2) V(P3) V(P) V(G) V(cnz) V(cny) V(cnx)
 .endc
 .end
