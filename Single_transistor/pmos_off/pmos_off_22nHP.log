@@ -1,0 +1,7 @@
+Questionable use of curly braces in "let voltage = {voltage} + 0.01"
+    Error: undefined symbol in: "[voltage]"
+Questionable use of curly braces in "alter vdd = {voltage}"
+    Error: undefined symbol in: "[voltage]"
+Circuit: .include 22nm_HP.pm
+
+Fatal Error: Multiple instances of "Echo"
