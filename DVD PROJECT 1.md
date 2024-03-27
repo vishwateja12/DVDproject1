@@ -6,10 +6,14 @@
 
 
 
-   - BANALA VISHWA TEJA REDDY
-   - KETHU SESHA SARATH REDDY
-   - SANGEETHAM DEEPAK
-   - MERUGU NANDITHA
+   - BANALA VISHWA TEJA REDDY - 2020102058
+     - NetList and VLSI part leakages
+   - KETHU SESHA SARATH REDDY - 2020102028
+     - NetList and VLSI part leakages
+   - SANGEETHAM DEEPAK - 2020102063
+     - Python scripting part
+   - MERUGU NANDITHA - 2020102061
+     - python scripting part
 
 
 
