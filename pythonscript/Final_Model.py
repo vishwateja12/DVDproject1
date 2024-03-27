@@ -591,15 +591,15 @@ def NOT_use(A0) :
 
 
 
-leakage_sub,leakage_body,leakage_gate = nstack(0,0,2,0.8)
-print(leakage_sub)
-print(leakage_body)
-print(leakage_gate)
+# leakage_sub,leakage_body,leakage_gate = nstack(0,0,2,0.8)
+# print(leakage_sub)
+# print(leakage_body)
+# print(leakage_gate)
 
-leakage_sub,leakage_body,leakage_gate = NOT(0,1,0.8)
-print(leakage_sub)
-print(leakage_body)
-print(leakage_gate)
+# leakage_sub,leakage_body,leakage_gate = NOT(0,1,0.8)
+# print(leakage_sub)
+# print(leakage_body)
+# print(leakage_gate)
 
 def Final_circuit(G0,G1,G2,G3,P0,P1,P2,P3,Cn) :
     leakage_sub =0
@@ -708,9 +708,44 @@ def Final_circuit(G0,G1,G2,G3,P0,P1,P2,P3,Cn) :
     leakage_body += OR_use(P2,P3)[1]
     leakage_body += OR_use(W23,W24)[1]
 
+    leakage_gate += AND_use(P0,G0)[2]
+    leakage_gate += NOT_use(Cn)[2]
+    leakage_gate += AND_use(G0,W2)[2]
+    leakage_gate += NOR_use(W1,W3)[2]
+
+    leakage_gate += AND_use(P1,G1)[2]
+    leakage_gate += AND_use(G1,W1)[2]
+    leakage_gate += AND_use(W3,G1)[2]
+    leakage_gate += OR_use(W4,W5)[2]
+    leakage_gate += NOR_use(W7,W6)[2]
+
+    leakage_gate += AND_use(P2,G2)[2]
+    leakage_gate += AND_use(W4,G2)[2]
+    leakage_gate += AND_use(G1,G2)[2]
+    leakage_gate += AND_use(W1,W10)[2]
+    leakage_gate += AND_use(W3,W10)[2]
+    leakage_gate += OR_use(W8,W9)[2]
+    leakage_gate += OR_use(W11,W12)[2]
+    leakage_gate += NOR_use(W13,W14)[2]
+
+    leakage_gate += AND_use(P3,G3)[2]
+    leakage_gate += AND_use(W8,G3)[2]
+    leakage_gate += AND_use(P1,G3)[2]
+    leakage_gate += AND_use(W17,W10)[2]
+    leakage_gate += AND_use(G0,G3)[2]
+    leakage_gate += AND_use(W10,W19)[2]
+    leakage_gate += OR_use(W15,W16)[2]
+    leakage_gate += OR_use(W18,W20)[2]
+    leakage_gate += OR_use(W21,W22)[2]
+    
+    leakage_gate += OR_use(P0,P1)[2]
+    leakage_gate += OR_use(P2,P3)[2]
+    leakage_gate += OR_use(W23,W24)[2]
+
 
     return P,G,Cnx,Cny,Cnz,leakage_sub,leakage_body,leakage_gate
 
 leakage_sub = Final_circuit(0,0,0,0,0,0,0,0,0)[5]
 leakage_body = Final_circuit(0,0,0,0,0,0,0,0,0)[6]
-print(leakage_sub,leakage_body)
+leakage_gate = Final_circuit(0,0,0,0,0,0,0,0,0)[7]
+print(leakage_gate+leakage_sub)
